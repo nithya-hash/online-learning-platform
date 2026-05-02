@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LearnX Platform</title>
+  <title>Learning Platform</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h2>LearnX</h2>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Courses</a>
-      <a href="#">Login</a>
-    </nav>
-  </header>
+<h1>Online Learning Platform</h1>
 
-  <section class="hero">
-    <h1>Upgrade Your Skills 🚀</h1>
-    <p>Learn programming, AI, and more</p>
-    <button>Explore Courses</button>
-  </section>
+<!-- REGISTER -->
+<h2>Register</h2>
+<form id="registerForm">
+  <input type="text" id="name" placeholder="Name" required><br>
+  <input type="email" id="email" placeholder="Email" required><br>
+  <input type="password" id="password" placeholder="Password" required><br>
+  <button type="submit">Register</button>
+</form>
 
-  <section class="courses">
-    <h2>Popular Courses</h2>
+<!-- LOGIN -->
+<h2>Login</h2>
+<form id="loginForm">
+  <input type="email" id="loginEmail" placeholder="Email" required><br>
+  <input type="password" id="loginPassword" placeholder="Password" required><br>
+  <button type="submit">Login</button>
+</form>
 
-    <div class="card">
-      <h3>JavaScript Basics</h3>
-      <p>Learn JS from scratch</p>
-      <button>Enroll</button>
-    </div>
+<!-- COURSES -->
+<h2>Courses</h2>
+<button onclick="loadCourses()">Load Courses</button>
+<div id="courseList"></div>
 
-    <div class="card">
-      <h3>Python for Beginners</h3>
-      <p>Start your coding journey</p>
-      <button>Enroll</button>
-    </div>
-
-    <div class="card">
-      <h3>Web Development</h3>
-      <p>Build real websites</p>
-      <button>Enroll</button>
-    </div>
-
-  </section>
-
+<script src="script.js"></script>
 </body>
 </html>
