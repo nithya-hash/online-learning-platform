@@ -1,12 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
+// REGISTER
 router.post("/register", (req, res) => {
-  res.json({ message: "Register working" });
+  const { name, email } = req.body;
+  res.json({ message: `User ${name} registered successfully` });
 });
 
+// LOGIN
 router.post("/login", (req, res) => {
-  res.json({ message: "Login working" });
+  const { email } = req.body;
+
+  res.json({
+    message: "Login successful",
+    token: "dummy-token"
+  });
 });
 
 module.exports = router;
