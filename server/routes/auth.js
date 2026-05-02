@@ -1,20 +1,12 @@
-// routes/auth.js
-const jwt = require("jsonwebtoken");
+const express = require("express");
+const router = express.Router();
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email, password });
-
-  if (!user) {
-    return res.status(400).json({ message: "Invalid credentials" });
-  }
-
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
-
-  res.json({ message: "Login successful", token });
+router.post("/register", (req, res) => {
+  res.json({ message: "Register working" });
 });
+
+router.post("/login", (req, res) => {
+  res.json({ message: "Login working" });
+});
+
+module.exports = router;

@@ -1,4 +1,5 @@
 const BASE_URL = "https://online-learning-platform-1-9suf.onrender.com";
+alert("JS is working");
 
 // REGISTER
 document.getElementById("registerForm").addEventListener("submit", async (e) => {

@@ -4,6 +4,14 @@ const router = express.Router();
 const Course = require("../models/Course");
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const express = require("express");
+const router = express.Router();
+
+router.get("/", (req, res) => {
+  res.json([{ title: "Sample Course", description: "Test course" }]);
+});
+
+module.exports = router;
 
 // ================= CREATE COURSE =================
 router.post("/create", auth, async (req, res) => {
