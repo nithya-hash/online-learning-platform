@@ -1,44 +1,25 @@
 const BASE_URL = "https://online-learning-platform-1-9suf.onrender.com";
-alert("JS is working");
-
-// REGISTER
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const data = {
-    name: name.value,
-    email: email.value,
-    password: password.value
-  };
-
-  const res = await fetch(`${BASE_URL}/api/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-
-  const result = await res.json();
-  alert(result.message);
-});
 
 // LOGIN
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
+document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
   const res = await fetch(`${BASE_URL}/api/auth/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: loginEmail.value,
-      password: loginPassword.value
-    })
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, password })
   });
 
   const data = await res.json();
 
   if (data.token) {
     localStorage.setItem("token", data.token);
-    alert("Login success");
+    window.location.href = "dashboard.html";
   } else {
     alert(data.message);
   }
@@ -54,10 +35,17 @@ async function loadCourses() {
 
   courses.forEach(c => {
     div.innerHTML += `
-      <div>
-        <h3>${c.title}</h3>
+      <div class="card p-3 m-2 shadow text-white">
+        <h4>${c.title}</h4>
         <p>${c.description}</p>
-        <button onclick="enroll('${c._id}')">Enroll</button>
+
+        <button class="btn btn-success m-1" onclick="enroll('${c._id}')">
+          Enroll
+        </button>
+
+        <button class="btn btn-info m-1" onclick="generateCertificate('${c.title}')">
+          Certificate
+        </button>
       </div>
     `;
   });
@@ -65,16 +53,39 @@ async function loadCourses() {
 
 // ENROLL
 async function enroll(courseId) {
-  const token = localStorage.getItem("token");
-
   const res = await fetch(`${BASE_URL}/api/courses/enroll/${courseId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": token
-    }
+    method: "POST"
   });
 
   const data = await res.json();
   alert(data.message);
+}
+
+// LOGOUT
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+// PDF CERTIFICATE
+function generateCertificate(courseName) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(20);
+  doc.text("Certificate of Completion", 20, 30);
+
+  doc.setFontSize(14);
+  doc.text("This certifies that", 20, 50);
+
+  doc.setFontSize(18);
+  doc.text("Sandhya", 20, 70);
+
+  doc.setFontSize(14);
+  doc.text("has completed", 20, 90);
+
+  doc.setFontSize(16);
+  doc.text(courseName, 20, 110);
+
+  doc.save("certificate.pdf");
 }

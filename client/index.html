@@ -1,35 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Learning Platform</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Online Learning Platform</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f5f7fa;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Online Learning Platform</h1>
+<div class="container mt-4">
 
-<!-- REGISTER -->
-<h2>Register</h2>
-<form id="registerForm">
-  <input type="text" id="name" placeholder="Name" required><br>
-  <input type="email" id="email" placeholder="Email" required><br>
-  <input type="password" id="password" placeholder="Password" required><br>
-  <button type="submit">Register</button>
-</form>
+  <h1 class="text-center mb-4">Online Learning Platform</h1>
 
-<!-- LOGIN -->
-<h2>Login</h2>
-<form id="loginForm">
-  <input type="email" id="loginEmail" placeholder="Email" required><br>
-  <input type="password" id="loginPassword" placeholder="Password" required><br>
-  <button type="submit">Login</button>
-</form>
+  <!-- REGISTER -->
+  <div class="card p-3 mb-3">
+    <h3>Register</h3>
+    <form id="registerForm">
+      <input type="text" id="name" class="form-control mb-2" placeholder="Name" required>
+      <input type="email" id="email" class="form-control mb-2" placeholder="Email" required>
+      <input type="password" id="password" class="form-control mb-2" placeholder="Password" required>
+      <button class="btn btn-success">Register</button>
+    </form>
+  </div>
 
-<!-- COURSES -->
-<h2>Courses</h2>
-<button onclick="loadCourses()">Load Courses</button>
-<div id="courseList"></div>
+  <!-- LOGIN -->
+  <div class="card p-3 mb-3">
+    <h3>Login</h3>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Email" required>
+      <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Password" required>
+      <button class="btn btn-primary">Login</button>
+      
+    </form>
+  </div>
 
+  <!-- BUTTONS -->
+  <div class="text-center mb-3">
+    <button class="btn btn-warning" onclick="loadCourses()">Load Courses</button>
+    <button class="btn btn-info" onclick="loadDashboard()">Dashboard</button>
+    <button onclick="generateCertificate('${c.title}')">Get Certificate</button>
+  </div>
+
+  <!-- OUTPUT -->
+  <div id="courseList"></div>
+
+</div>
+
+<!-- JS -->
 <script src="script.js"></script>
+
 </body>
 </html>
