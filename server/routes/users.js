@@ -1,20 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const User = require("../models/user");
 
-const User = require("../models/User");
-const auth = require("../middleware/auth");
+router.post("/enroll", async (req, res) => {
+  const { email, course } = req.body;
 
-// ================= GET MY COURSES =================
-router.get("/my-courses", auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id)
-            .populate("enrolledCourses");
+  const user = await User.findOne({ email });
 
-        res.json(user.enrolledCourses);
+  if (!user) return res.json({ message: "User not found" });
 
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  user.courses.push(course);
+  await user.save();
+
+  res.json({ message: "Course enrolled" });
 });
 
 module.exports = router;

@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- PDF library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <style>
-    body {
-      background: #0f172a;
-      color: white;
-    }
-
-    .card {
-      background: #1e293b;
-      border-radius: 12px;
-    }
-  </style>
+  <title>Online Learning</title>
+  <p id="welcome"></p>
+  <link rel="stylesheet" href="style.css">
 </head>
+<body>
+  
 
-<body class="container mt-5">
+<div style="display:flex; height:100vh;">
 
-<div class="d-flex justify-content-between mb-3">
-  <h2>Dashboard</h2>
-  <button class="btn btn-danger" onclick="logout()">Logout</button>
+  <!-- Sidebar -->
+  <div style="width:220px; background:#0f172a; color:white; padding:20px;">
+    <h2>LearnHub</h2>
+    <p onclick="loadCourses()">📚 Courses</p>
+    <p onclick="showCertificate()">🎓 Certificate</p>
+    <p onclick="logout()">🚪 Logout</p>
+  </div>
+
+  <!-- Main Content -->
+  <div style="flex:1; padding:20px;">
+    <h1>Dashboard</h1>
+
+    <div id="courses"></div>
+
+    <div id="certificateSection" style="display:none;">
+      <h2>Certificate</h2>
+      <input type="text" id="name" placeholder="Your Name" />
+      <button onclick="generateCertificate()">Generate</button>
+      <button onclick="downloadPDF()">Download PDF</button>
+
+      <div id="certificateBox" style="display:none; margin-top:20px; padding:20px; background:white; color:black; text-align:center;">
+        <h1>Certificate of Completion</h1>
+        <p>This is to certify that</p>
+        <h2 id="certName"></h2>
+        <p>has successfully completed the course</p>
+        <h3>Online Learning Platform</h3>
+      </div>
+    </div>
+
+  </div>
 </div>
-
-<div class="text-center mb-3">
-  <button class="btn btn-warning" onclick="loadCourses()">Load Courses</button>
-</div>
-
-<div id="courseList"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script src="script.js"></script>
-
 </body>
-</html>
