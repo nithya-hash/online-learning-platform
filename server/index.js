@@ -25,3 +25,6 @@ app.listen(process.env.PORT || 5000, () => {
 });
 const userRoutes = require("./routes/users");
 app.use("/api/users", userRoutes);
+app.get("/", (req, res) => {
+  res.send("Backend Running ✅");
+});

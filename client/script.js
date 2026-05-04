@@ -62,19 +62,50 @@ async function loadCourses() {
 
   document.getElementById("courses").innerHTML = html;
 }
-async function enroll(course) {
-  const user = JSON.parse(localStorage.getItem("user"));
+async function enroll(courseId) {
 
-  await fetch(`${BASE_URL}/api/users/enroll`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: user.email,
-      course: course
-    })
-  });
+  const userData = localStorage.getItem("user");
 
-  alert("Enrolled in " + course);
+  if (!userData || userData === "undefined") {
+    alert("Please login first");
+    window.location.href = "login.html";
+    return;
+  }
+
+  let user;
+
+  try {
+    user = JSON.parse(userData);
+  } catch {
+    alert("Session error, please login again");
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    const res = await fetch("https://online-learning-platform-1-9suf.onrender.com/api/enroll", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId: user._id,
+        courseId: courseId
+      })
+    });
+
+    // ✅ FIX: handle empty response
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : {};
+
+    console.log(data);
+    alert("Enrolled successfully!");
+
+  } catch (err) {
+    console.error(err);
+    alert("Enroll failed");
+  }
 }
 
 function generateCertificate() {
@@ -131,7 +162,13 @@ function logout() {
 if (window.location.pathname.includes("dashboard.html")) {
   loadCourses();
 }
-const user = JSON.parse(localStorage.getItem("user"));
+function safeParse(data) {
+  try {
+    return JSON.parse(data);
+  } catch {
+    return null;
+  }
+}
 if (user && document.getElementById("welcome")) {
   document.getElementById("welcome").innerText = "Welcome " + user.name;
 }
