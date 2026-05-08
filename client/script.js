@@ -33,11 +33,14 @@ async function login() {
   const data = await res.json();
   console.log("LOGIN:", data);
 
-  // ✅ FIX HERE (check message instead of token)
   if (data.message === "Login success") {
-    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("user", JSON.stringify(data.user));  // ✅ IMPORTANT
+    const userCheck = localStorage.getItem("user");
 
-    window.location.href = "/dashboard.html";   // ✅ REDIRECT
+if (!userCheck) {
+  window.location.href = "/login.html";
+}
+    window.location.href = "/dashboard.html";
   } else {
     alert("Login failed");
   }
@@ -68,44 +71,25 @@ async function enroll(courseId) {
 
   if (!userData || userData === "undefined") {
     alert("Please login first");
-    window.location.href = "login.html";
+    window.location.href = "/login.html";
     return;
   }
 
-  let user;
+  const user = JSON.parse(userData);
 
-  try {
-    user = JSON.parse(userData);
-  } catch {
-    alert("Session error, please login again");
-    localStorage.removeItem("user");
-    window.location.href = "login.html";
-    return;
-  }
+  const res = await fetch(`${BASE_URL}/api/users/enroll`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: user.email,
+      course: courseId
+    })
+  });
 
-  try {
-    const res = await fetch("https://online-learning-platform-1-9suf.onrender.com/api/enroll", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userId: user._id,
-        courseId: courseId
-      })
-    });
+  const data = await res.json();
+  console.log(data);
 
-    // ✅ FIX: handle empty response
-    const text = await res.text();
-    const data = text ? JSON.parse(text) : {};
-
-    console.log(data);
-    alert("Enrolled successfully!");
-
-  } catch (err) {
-    console.error(err);
-    alert("Enroll failed");
-  }
+  alert("Enrolled successfully!");
 }
 
 function generateCertificate() {
