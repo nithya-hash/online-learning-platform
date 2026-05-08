@@ -1,48 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Online Learning</title>
-  <p id="welcome"></p>
+  <title>Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  
 
-<div style="display:flex; height:100vh;">
+<body class="dashboard-body">
 
-  <!-- Sidebar -->
-  <div style="width:220px; background:#0f172a; color:white; padding:20px;">
-    <h2>LearnHub</h2>
-    <p onclick="loadCourses()">📚 Courses</p>
-    <p onclick="showCertificate()">🎓 Certificate</p>
-    <p onclick="logout()">🚪 Logout</p>
+<div class="sidebar">
+  <h2>GUVI Learn</h2>
+
+  <a href="#">🏠 Dashboard</a>
+  <a href="#">📚 Courses</a>
+  <a href="#">🎓 Certificates</a>
+  <a href="#">👤 Profile</a>
+
+  <button onclick="logout()" class="logout-btn">Logout</button>
+</div>
+
+<div class="main-content">
+
+  <div class="topbar">
+    <h1>Welcome Student 🚀</h1>
   </div>
 
-  <!-- Main Content -->
-  <div style="flex:1; padding:20px;">
-    <h1>Dashboard</h1>
+  <div class="stats-container">
 
-    <div id="courses"></div>
+    <div class="stat-card">
+      <h2>5</h2>
+      <p>Courses</p>
+    </div>
 
-    <div id="certificateSection" style="display:none;">
-      <h2>Certificate</h2>
-      <input type="text" id="name" placeholder="Your Name" />
-      <button onclick="generateCertificate()">Generate</button>
-      <button onclick="downloadPDF()">Download PDF</button>
+    <div class="stat-card">
+      <h2>3</h2>
+      <p>Completed</p>
+    </div>
 
-      <div id="certificateBox" style="display:none; margin-top:20px; padding:20px; background:white; color:black; text-align:center;">
-        <h1>Certificate of Completion</h1>
-        <p>This is to certify that</p>
-        <h2 id="certName"></h2>
-        <p>has successfully completed the course</p>
-        <h3>Online Learning Platform</h3>
-      </div>
+    <div class="stat-card">
+      <h2>80%</h2>
+      <p>Progress</p>
     </div>
 
   </div>
+
+  <h2 class="course-title">Available Courses</h2>
+
+  <div id="courses" class="courses-grid"></div>
+
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script src="script.js"></script>
+
 </body>
+</html>

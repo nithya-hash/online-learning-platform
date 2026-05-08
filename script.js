@@ -1,158 +1,162 @@
-const BASE_URL = "https://online-learning-platform-1-9suf.onrender.com";
-console.log("JS WORKING");
-
 // REGISTER
-async function register() {
+function register() {
+
   const name = document.getElementById("name").value;
+
   const email = document.getElementById("email").value;
+
   const password = document.getElementById("password").value;
 
-  const res = await fetch(`${BASE_URL}/api/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password })
-  });
+  const user = {
+    name,
+    email,
+    password
+  };
 
-  const data = await res.json();
-  alert(data.message);
+  localStorage.setItem("user", JSON.stringify(user));
+
+  alert("Registration Successful");
 
   window.location.href = "login.html";
+
 }
+
+
 
 // LOGIN
-async function login() {
+function login() {
+
   const email = document.getElementById("email").value;
+
   const password = document.getElementById("password").value;
 
-  const res = await fetch(`${BASE_URL}/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  });
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const data = await res.json();
-  console.log("LOGIN:", data);
+  if (
+    user &&
+    user.email === email &&
+    user.password === password
+  ) {
 
-  if (data.message === "Login success") {
-    localStorage.setItem("user", JSON.stringify(data.user));  // ✅ IMPORTANT
-    const userCheck = localStorage.getItem("user");
+    alert("Login Successful");
 
-if (!userCheck) {
-  window.location.href = "/login.html";
-}
-    window.location.href = "/dashboard.html";
+    window.location.href = "dashboard.html";
+
   } else {
-    alert("Login failed");
+
+    alert("Invalid Email or Password");
+
   }
+
 }
+
+
 
 // LOAD COURSES
-async function loadCourses() {
-  const res = await fetch(`${BASE_URL}/api/courses`);
-  const courses = await res.json();
+function loadCourses() {
 
-  let html = "";
+  const coursesDiv = document.getElementById("courses");
 
-  courses.forEach(c => {
-    html += `
+  if (!coursesDiv) return;
+
+  const courses = [
+
+    {
+      title: "Python Full Stack",
+      description: "Learn Python from basics"
+    },
+
+    {
+      title: "MERN Stack",
+      description: "MongoDB Express React Node"
+    },
+
+    {
+      title: "UI UX Design",
+      description: "Master Figma Design"
+    }
+
+  ];
+
+  coursesDiv.innerHTML = "";
+
+  courses.forEach(course => {
+
+    coursesDiv.innerHTML += `
+
       <div class="course-card">
-        <h3>${c.title}</h3>
-        <p>${c.description}</p>
-        <button onclick="enroll('${c.title}')">Enroll</button>
+
+        <h3>${course.title}</h3>
+
+        <p>${course.description}</p>
+
+        <button onclick="enroll('${course.title}')">
+          Enroll
+        </button>
+
+        <button onclick="downloadCertificate('${course.title}')">
+          Certificate
+        </button>
+
       </div>
+
     `;
+
   });
 
-  document.getElementById("courses").innerHTML = html;
-}
-async function enroll(courseId) {
-
-  const userData = localStorage.getItem("user");
-
-  if (!userData || userData === "undefined") {
-    alert("Please login first");
-    window.location.href = "/login.html";
-    return;
-  }
-
-  const user = JSON.parse(userData);
-
-  const res = await fetch(`${BASE_URL}/api/users/enroll`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: user.email,
-      course: courseId
-    })
-  });
-
-  const data = await res.json();
-  console.log(data);
-
-  alert("Enrolled successfully!");
 }
 
-function generateCertificate() {
-  const name = document.getElementById("name").value;
 
-  if (!name) {
-    alert("Enter your name");
-    return;
-  }
 
-  document.getElementById("certName").innerText = name;
-  document.getElementById("certificateBox").style.display = "block";
+// ENROLL
+function enroll(course) {
+
+  alert("Enrolled in " + course);
+
 }
 
-async function downloadPDF() {
-  const { jsPDF } = window.jspdf;
 
-  const element = document.getElementById("certificateBox");
 
-  const canvas = await html2canvas(element);
-  const imgData = canvas.toDataURL("image/png");
+// CERTIFICATE
+function downloadCertificate(course) {
 
-  const pdf = new jsPDF();
-  pdf.addImage(imgData, "PNG", 10, 10, 180, 100);
-  pdf.save("certificate.pdf");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const studentName = user?.name || "Student";
+
+  const element = document.createElement("a");
+
+  const file = new Blob(
+    [
+      "CERTIFICATE OF COMPLETION\n\n" +
+      "This certifies that\n\n" +
+      studentName +
+      "\n\nhas successfully completed\n\n" +
+      course
+    ],
+    { type: "text/plain" }
+  );
+
+  element.href = URL.createObjectURL(file);
+
+  element.download = "certificate.txt";
+
+  document.body.appendChild(element);
+
+  element.click();
+
 }
-function showCertificate() {
-  document.getElementById("courses").style.display = "none";
-  document.getElementById("certificateSection").style.display = "block";
-}
 
-function logout() {
-  localStorage.clear();
-  window.location.href = "/login.html";
-}
 
-// DOWNLOAD
-function downloadCertificate() {
-  const name = document.getElementById("username").value;
-
-  const blob = new Blob([`Certificate for ${name}`], { type: "text/plain" });
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "certificate.txt";
-  a.click();
-}
 
 // LOGOUT
 function logout() {
-  localStorage.removeItem("token");
+
   window.location.href = "login.html";
+
 }
-if (window.location.pathname.includes("dashboard.html")) {
-  loadCourses();
-}
-function safeParse(data) {
-  try {
-    return JSON.parse(data);
-  } catch {
-    return null;
-  }
-}
-if (user && document.getElementById("welcome")) {
-  document.getElementById("welcome").innerText = "Welcome " + user.name;
-}
+
+
+
+// AUTO LOAD
+loadCourses();
