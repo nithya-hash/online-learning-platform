@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/client/login.html"
+      "destination": "/login.html"
     }
   ]
 }
